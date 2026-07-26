@@ -1,48 +1,52 @@
 from rest_framework import serializers
 
 from plants.models import Category, PlantType, LightRequirement, WaterRequirement, SoilType, Season, Lifespan, GrowthRate, Plant
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model=Category
-        feilds='_all_'
+        model = Category
+        fields = "__all__"
 
 
 class PlantTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model=PlantType
-        feilds='_all_'
+        model = PlantType
+        fields = "__all__"
+
 
 class LightRequirementSerializer(serializers.ModelSerializer):
     class Meta:
-        model=LightRequirement
-        feilds='_all_'
+        model = LightRequirement
+        fields = "__all__"
+
 
 class WaterRequirementSerializer(serializers.ModelSerializer):
     class Meta:
-        model=WaterRequirement
-        feilds='_all_'
+        model = WaterRequirement
+        fields = "__all__"
+
 
 class GrowthRateSerializer(serializers.ModelSerializer):
     class Meta:
-        model=GrowthRate
-        feilds='_all_'
+        model = GrowthRate
+        fields = "__all__"
+
 
 class LifespanSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Lifespan
-        feilds='_all_'
+        model = Lifespan
+        fields = "__all__"
+
 
 class SeasonSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Season
-        feilds='_all_'
+        model = Season
+        fields = "__all__"
+
 
 class SoilTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model=SoilType
-        feilds='_all_'
-
+        model = SoilType
+        fields = "__all__"
 
 class PlantSerializer(serializers.ModelSerializer):
 
