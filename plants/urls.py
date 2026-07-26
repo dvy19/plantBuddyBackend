@@ -12,7 +12,7 @@ urlpatterns = [
      path(
             "allPlants/",
             PlantApiView.as_view(),
-            name="get-single-plant"
+            name="get-all-plant"
     ),
 
 

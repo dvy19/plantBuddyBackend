@@ -9,6 +9,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 class PlantApiView(APIView):
 
+    permission_classes = [AllowAny]
+
     def get(self,request,plant_id=None):
 
         if plant_id:
