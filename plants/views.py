@@ -38,7 +38,7 @@ class PlantApiView(APIView):
                 )
         
         plants = Plant.objects.all()
-        serializer = PlantSerializer(Plant, many=True)
+        serializer = PlantSerializer(plants, many=True)
         return Response(
             {
                 "message": "Places retrieved successfully",
