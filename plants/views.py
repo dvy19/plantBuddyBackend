@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import Plant
 from .serializers import PlantSerializer
+from rest_framework.permissions import AllowAny
 
 # Create your views here.
 from rest_framework.response import Response
