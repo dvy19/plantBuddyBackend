@@ -9,6 +9,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+from .services.gemini_service import plant_facts_for_a_day
+
+
 class PlantApiView(APIView):
 
     permission_classes = [AllowAny]
@@ -48,4 +51,17 @@ class PlantApiView(APIView):
             status=status.HTTP_200_OK
         )
 
+
+class PlantFactForDay(APIView):
+
+    permission_classes = [AllowAny]
+
+    def get(self,request):
+        print("Inside API")
+
+        
+        fact = plant_facts_for_a_day()
+        print(fact)
+
+        return Response(fact)
             
