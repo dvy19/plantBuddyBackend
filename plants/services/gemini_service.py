@@ -8,7 +8,8 @@ client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 def plant_facts_for_a_day():
     try:
-        prompt = f"""You are an expert botanist.
+        prompt = """
+            You are an expert botanist.
 
             Generate one unique Plant Fact of the Day.
 
@@ -30,20 +31,22 @@ def plant_facts_for_a_day():
             - Rainforest plants
 
             Rules:
-            - Fact must be scientifically accurate.
-            - 30–60 words.
-            - Easy English.
-            - Interesting enough that users learn something new.
-            - No emojis.
-            - No markdown.
-            - Never include introductory text.
+            - The fact must be scientifically accurate.
+            - Keep the fact between 30 and 60 words.
+            - Use simple, easy-to-understand English.
+            - Make the fact interesting and educational.
+            - Do not include emojis.
+            - Do not use markdown.
+            - Do not include any introductory or concluding text.
             - Return ONLY valid JSON.
+            - Ensure the JSON is valid and can be parsed directly.
 
-            JSON:
+            Return this exact JSON structure:
+
             {
-            "title":"",
-            "fact":"",
-            "category":""
+            "title": "Short, catchy title",
+            "fact": "Interesting plant fact.",
+            "category": "Science | Nature | Gardening | History | Environment | Fun Fact"
             }
         """
 
