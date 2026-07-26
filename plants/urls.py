@@ -16,7 +16,7 @@ urlpatterns = [
     ),
 
     path(
-        "getFactOfDay",
+        "getFactOfDay/",
         PlantFactForDay.as_view(),
         name="plant_fact_for_day"
     )
