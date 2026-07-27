@@ -40,7 +40,7 @@ class LifespanSerializer(serializers.ModelSerializer):
 class HomePlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model=HomePlace
-        feilds="__all__"
+        fields="__all__"
 
 
 class SeasonSerializer(serializers.ModelSerializer):
