@@ -75,6 +75,8 @@ class Plant(models.Model):
     lifespan = models.ForeignKey(Lifespan, on_delete=models.PROTECT)
     soil_type = models.ForeignKey(SoilType, on_delete=models.PROTECT)
 
+    home_place=models.ForeignKey(HomePlace,on_delete=models.PROTECT , blank=True, null=True)
+
     best_planting_season = models.ForeignKey(
         Season,
         related_name="planting_plants",
