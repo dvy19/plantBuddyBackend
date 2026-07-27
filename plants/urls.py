@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import PlantApiView, PlantFactForDay
+from .views import PlantApiView, PlantFactForDay, PlantCategoryFilterAPIView
 
 urlpatterns = [
     path(
@@ -19,6 +19,12 @@ urlpatterns = [
         "getFactOfDay/",
         PlantFactForDay.as_view(),
         name="plant_fact_for_day"
+    ),
+
+    path(
+        "category-filter/",
+        PlantCategoryFilterAPIView.as_view()
+
     )
 
 
