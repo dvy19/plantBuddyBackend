@@ -11,8 +11,9 @@ from rest_framework.views import APIView
 from rest_framework import status
 import traceback
 
-from .services.gemini_service import plant_facts_for_a_day
+from .pagination import PlantPagination
 
+from .services.gemini_service import plant_facts_for_a_day
 
 class PlantApiView(APIView):
 
@@ -20,19 +21,19 @@ class PlantApiView(APIView):
 
     def get(self, request, plant_id=None):
 
-        try:
-            print("=" * 50)
-            print("Request received")
-            print("Plant ID:", plant_id)
+        print("=" * 50)
+        print("Request received")
+        print("Plant ID:", plant_id)
 
-            if plant_id:
+        # Single Plant
+        if plant_id:
+            try:
                 plant = Plant.objects.get(id=plant_id)
+
                 print("Plant found:", plant)
 
                 serializer = PlantSerializer(plant)
-                print("Serializer created")
 
-                print("Serialized data:")
                 print(serializer.data)
 
                 return Response(
@@ -43,33 +44,31 @@ class PlantApiView(APIView):
                     status=status.HTTP_200_OK
                 )
 
-            plants = Plant.objects.all()
-            print("Total plants:", plants.count())
+            except Plant.DoesNotExist:
+                return Response(
+                    {
+                        "message": "Plant not found"
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
 
-            serializer = PlantSerializer(plants, many=True)
+        # All Plants (Paginated)
+        plants = Plant.objects.all()
 
-            print("All plants serialized successfully")
+        paginator = PlantPagination()
 
-            return Response(
-                {
-                    "message": "Plants retrieved successfully",
-                    "data": serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
+        result_page = paginator.paginate_queryset(plants, request)
 
-        except Exception as e:
-            print("\nERROR OCCURRED")
-            print(type(e).__name__)
-            print(e)
-            traceback.print_exc()
+        serializer = PlantSerializer(result_page, many=True)
 
-            return Response(
-                {
-                    "error": str(e)
-                },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+        return paginator.get_paginated_response(
+            {
+                "message": "Plants retrieved successfully",
+                "data": serializer.data
+            }
+        )
+
+        
 
 
 class PlantFactForDay(APIView):
