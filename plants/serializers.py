@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from plants.models import Category, PlantType, LightRequirement, WaterRequirement, SoilType, Season, Lifespan, GrowthRate, Plant
+from plants.models import Category, PlantType, LightRequirement, WaterRequirement, SoilType, Season, Lifespan, GrowthRate, Plant , HomePlace
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -36,6 +37,11 @@ class LifespanSerializer(serializers.ModelSerializer):
         model = Lifespan
         fields = "__all__"
 
+class HomePlaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=HomePlace
+        feilds="__all__"
+
 
 class SeasonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,6 +63,8 @@ class PlantSerializer(serializers.ModelSerializer):
     growth_rate = GrowthRateSerializer(read_only=True)
     lifespan = LifespanSerializer(read_only=True)
     soil_type = SoilTypeSerializer(read_only=True)
+
+    home_place=HomePlaceSerializer(read_only=True)
 
     best_planting_season = SeasonSerializer(read_only=True)
     flowering_season = SeasonSerializer(read_only=True)

@@ -75,3 +75,4 @@ def plant_facts_for_a_day():
         print("Gemini API Error:", str(e))
         traceback.print_exc()
         raise
+
