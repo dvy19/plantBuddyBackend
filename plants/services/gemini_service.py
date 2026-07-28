@@ -2,6 +2,7 @@ from google import genai
 from django.conf import settings
 import json
 import traceback
+import re
 
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
@@ -97,7 +98,6 @@ Plant Information
 Name: {plant.name}
 Scientific Name: {plant.scientific_name}
 Category: {plant.category.name}
-Type: {plant.type.name}
 Description: {plant.description}
 Light Requirement: {plant.light_requirement.name}
 Water Requirement: {plant.water_requirement.name}
