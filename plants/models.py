@@ -63,6 +63,7 @@ class SoilType(models.Model):
 
 
 class Plant(models.Model):
+
     name = models.CharField(max_length=100)
     scientific_name = models.CharField(max_length=150)
     description = models.TextField()
@@ -119,3 +120,30 @@ class Plant(models.Model):
 
     def __str__(self):
         return self.name
+
+class FAQQuestion(models.Model):
+    title = models.CharField(max_length=100)
+
+    prompt_template = models.TextField()
+
+    icon = models.CharField(max_length=30)
+
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return {self.title}
+
+# plant faq cache table
+
+class PlantFAQ(models.Model):
+    
+    plant = models.ForeignKey(Plant, on_delete=models.CASCADE)
+
+    question = models.ForeignKey(FAQQuestion, on_delete=models.CASCADE)
+
+    answer = models.TextField()
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("plant", "question")

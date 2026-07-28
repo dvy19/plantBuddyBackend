@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .models import Plant
-from .serializers import PlantSerializer
+from .models import Plant, FAQQuestion, PlantFAQ
+from .serializers import PlantSerializer, FaqSerializer, PlantFaqCacheSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import ListAPIView
 
@@ -13,7 +13,7 @@ import traceback
 
 from .pagination import PlantPagination
 
-from .services.gemini_service import plant_facts_for_a_day
+from .services.gemini_service import plant_facts_for_a_day , plant_faq_question
 
 class PlantApiView(APIView):
 
@@ -130,4 +130,78 @@ class PlantCategoryFilterAPIView(ListAPIView):
             queryset = queryset.filter(plant_type_id=plant_type)
 
         return queryset
-            
+
+
+class PlantFAQAPIView(APIView):
+
+    def post(self, request):
+
+        plant_id = request.data.get("plant_id")
+        question_id = request.data.get("question_id")
+
+        if not plant_id or not question_id:
+            return Response(
+                {"error": "plant_id and question_id are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            plant = Plant.objects.get(id=plant_id)
+        except Plant.DoesNotExist:
+            return Response(
+                {"error": "Plant not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            question = FAQQuestion.objects.get(
+                id=question_id,
+                is_active=True
+            )
+        except FAQQuestion.DoesNotExist:
+            return Response(
+                {"error": "Question not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # --------------------
+        # Check Cache
+        # --------------------
+
+        cache = PlantFAQ.objects.filter(
+            plant=plant,
+            question=question
+        ).first()
+
+        if cache:
+
+            return Response(
+                {
+                    "cached": True,
+                    "data": PlantFaqCacheSerializer(cache).data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        # --------------------
+        # Generate with Gemini
+        # --------------------
+
+        gemini_response = plant_faq_question(
+            plant,
+            question
+        )
+
+        cache = PlantFAQ.objects.create(
+            plant=plant,
+            question=question,
+            answer=gemini_response["answer"]
+        )
+
+        return Response(
+            {
+                "cached": False,
+                "data": PlantFaqCacheSerializer(cache).data
+            },
+            status=status.HTTP_201_CREATED
+        )

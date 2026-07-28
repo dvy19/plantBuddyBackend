@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from plants.models import Category, PlantType, LightRequirement, WaterRequirement, SoilType, Season, Lifespan, GrowthRate, Plant , HomePlace
+from plants.models import Category, PlantType, LightRequirement, WaterRequirement, SoilType, Season, Lifespan, GrowthRate, Plant , HomePlace, FAQQuestion, PlantFAQ
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -73,5 +73,27 @@ class PlantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plant
         fields = "__all__"
+
+
+class FaqSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=FAQQuestion
+        fields='__all__'
+
+class PlantFaqCacheSerializer(serializers.ModelSerializer):
+
+    plant_name = serializers.CharField(source="plant.name", read_only=True)
+    question_title = serializers.CharField(source="question.title", read_only=True)
+
+    class Meta:
+        model = PlantFAQ
+        fields = [
+            "plant_name",
+            "question_title",
+            "answer",
+            "updated_at",
+        ]
+
 
 
