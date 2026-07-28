@@ -77,9 +77,7 @@ def plant_facts_for_a_day():
         raise
 
 
-import json
-import re
-import traceback
+
 
 def plant_faq_question(plant, faq_question):
     try:

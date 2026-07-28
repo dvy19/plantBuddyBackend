@@ -134,6 +134,8 @@ class PlantCategoryFilterAPIView(ListAPIView):
 
 class PlantFAQAPIView(APIView):
 
+    permission_classes=[AllowAny]
+
     def post(self, request):
 
         plant_id = request.data.get("plant_id")
