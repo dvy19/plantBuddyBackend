@@ -102,7 +102,6 @@ Description: {plant.description}
 Light Requirement: {plant.light_requirement.name}
 Water Requirement: {plant.water_requirement.name}
 Soil: {plant.soil_type.name}
-Season: {plant.season.name}
 Temperature: {plant.temperature_min}°C - {plant.temperature_max}°C
 Humidity: {plant.humidity}
 Growth Rate: {plant.growth_rate.name}
