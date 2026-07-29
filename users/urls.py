@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from .views import DeviceTokenView, LoginView, RegisterView
+from .views import  LoginView, RegisterView
 
 urlpatterns = [
 
