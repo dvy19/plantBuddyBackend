@@ -147,3 +147,4 @@ class PlantFAQ(models.Model):
 
     class Meta:
         unique_together = ("plant", "question")
+
