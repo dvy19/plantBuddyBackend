@@ -4,6 +4,8 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
+from django.conf import settings
+
 # This manager handles creating regular users and superusers
 class CustomUserManager(BaseUserManager):
 
@@ -51,3 +53,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return f"{self.email} ({self.role})"
 
 
+
+class UserDetails(models.Model):
+
+    user=models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    name=models.CharField(max_length=50)
+
+    city=models.CharField(max_length=50)
+
+    def __str__(self):
+        return {self.name}
+    

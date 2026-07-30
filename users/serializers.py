@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import CustomUser
+from .models import CustomUser, UserDetails
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -45,3 +45,11 @@ class LoginSerializer(serializers.Serializer):
             "refresh": str(refresh),
             "role": user.role
         }
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=UserDetails
+        fields="__all__"
+
