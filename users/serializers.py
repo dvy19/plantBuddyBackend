@@ -49,7 +49,7 @@ class LoginSerializer(serializers.Serializer):
 
 class UserDetailSerializer(serializers.ModelSerializer):
 
-    mail = serializers.CharField(source="users.email", read_only=True)
+    mail = serializers.CharField(source="user.email", read_only=True)
 
 
     class Meta:

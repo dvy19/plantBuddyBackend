@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import Plant, FAQQuestion, PlantFAQ
-from .serializers import PlantSerializer, FaqSerializer, PlantFaqCacheSerializer
+from .serializers import PlantSerializer, FaqSerializer, PlantFaqCacheSerializer, WaterLogSerializer, WaterLog
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import ListAPIView
+from datetime import date, timedelta
 
 # Create your views here.
 from rest_framework.response import Response
@@ -207,3 +208,83 @@ class PlantFAQAPIView(APIView):
             },
             status=status.HTTP_201_CREATED
         )
+
+class WaterLogApiView(APIView):
+
+    def post( self, request):
+
+        plant_id=request.data.get("plant")
+
+        if not plant_id:
+            return Response(
+                {"error": "Plant ID is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            plant = Plant.objects.get(id=plant_id)
+        except Plant.DoesNotExist:
+            return Response(
+                {"error": "Plant not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        today = date.today()
+
+        watered=WaterLog.objects.filter(
+            user=request.user,
+            plant=plant,
+            watered_on=today
+        )
+
+        if watered.exists():
+            return Response(
+                {"message": "Plant already watered today."},
+                status=status.HTTP_200_OK
+            )
+
+        water_log = WaterLog.objects.create(
+            user=request.user,
+            plant=plant
+        )
+
+        serializer = WaterLogSerializer(water_log)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get(self, request, plant_id):
+
+        try:
+            plant = Plant.objects.get(id=plant_id)
+        except Plant.DoesNotExist:
+            return Response(
+                {"error": "Plant not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        logs = WaterLog.objects.filter(
+            user=request.user,
+            plant=plant
+        ).order_by("watered_on")
+
+        watered_dates = [log.watered_on for log in logs]
+
+        # ---------- Calculate Current Streak ----------
+        watered_set = set(watered_dates)
+
+        streak = 0
+        current_day = date.today()
+
+        while current_day in watered_set:
+            streak += 1
+            current_day -= timedelta(days=1)
+
+        serializer = WaterLogSerializer(logs, many=True)
+
+        return Response({
+            "streak": streak,
+            "watered_today": date.today() in watered_set,
+            "watered_dates": watered_dates,
+            "logs": serializer.data
+        })
+

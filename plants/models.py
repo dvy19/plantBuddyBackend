@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -148,3 +149,23 @@ class PlantFAQ(models.Model):
     class Meta:
         unique_together = ("plant", "question")
 
+class WaterLog(models.Model):
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+
+    plant = models.ForeignKey(
+        Plant,
+        on_delete=models.CASCADE,
+        related_name="water_logs"
+    )
+
+    watered_on = models.DateField(auto_now_add=True)
+
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "plant", "watered_on")
+
+    def __str__(self):
+        return f"{self.user} - {self.plant} - {self.watered_on}"

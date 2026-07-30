@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from plants.models import Category, PlantType, LightRequirement, WaterRequirement, SoilType, Season, Lifespan, GrowthRate, Plant , HomePlace, FAQQuestion, PlantFAQ
+from plants.models import Category, PlantType, LightRequirement, WaterRequirement, SoilType, Season, Lifespan, GrowthRate, Plant , HomePlace, FAQQuestion, PlantFAQ, WaterLog
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -94,6 +94,15 @@ class PlantFaqCacheSerializer(serializers.ModelSerializer):
             "answer",
             "updated_at",
         ]
+class WaterLogSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = WaterLog
+        fields = "__all__"
+        read_only_fields = [
+            "user",
+            "watered_on",
+            "created_at",
+        ]
 
 
