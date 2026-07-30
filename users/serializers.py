@@ -49,6 +49,9 @@ class LoginSerializer(serializers.Serializer):
 
 class UserDetailSerializer(serializers.ModelSerializer):
 
+    mail = serializers.CharField(source="users.email", read_only=True)
+
+
     class Meta:
         model=UserDetails
         fields="__all__"
