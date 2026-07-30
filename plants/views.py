@@ -254,8 +254,11 @@ class WaterLogApiView(APIView):
 
     def get(self, request, plant_id):
 
+        print(plant_id)
+
         try:
             plant = Plant.objects.get(id=plant_id)
+            print(plant)
         except Plant.DoesNotExist:
             return Response(
                 {"error": "Plant not found."},
@@ -266,6 +269,8 @@ class WaterLogApiView(APIView):
             user=request.user,
             plant=plant
         ).order_by("watered_on")
+
+        print(logs)
 
         watered_dates = [log.watered_on for log in logs]
 
