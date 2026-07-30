@@ -69,64 +69,61 @@ class RegisterView(APIView):
             print(serializer.errors)  # Check your terminal/console
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class UserDetailApiView(APIView):
 
-    def post(self,request):
 
-        serializer=UserDetailSerializer(data=request.data
+    def post(self, request):
+
+        profile, created = UserDetails.objects.get_or_create(
+            user=request.user
+        )
+
+        serializer = UserDetailSerializer(
+            profile,
+            data=request.data,
+            partial=True
         )
 
         if serializer.is_valid():
             serializer.save(user=request.user)
+
             return Response(
                 {
-                    "message":"Details created successfully",
-                    "data":serializer.data
+                    "message": "Profile saved successfully",
+                    "data": serializer.data
                 },
-                status=status.HTTP_201_CREATED
+                status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
             )
-        
+
         return Response(
             {
-                "message":"Failed to create details",
-                "errors":serializer.errors
+                "message": "Failed to save profile",
+                "errors": serializer.errors
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    
+    def get(self, request):
 
-    def get(self,request,id=None):
+        try:
+            profile = UserDetails.objects.get(user=request.user)
 
-        if id:
-            try:
-                user=UserDetails.objects.get(id=id)
-                serializer=UserDetailSerializer(user)
+            serializer = UserDetailSerializer(profile)
 
-                return Response(
-                    {
-                        "message":"Profile retrieved successfully",
-                        "data":serializer.data
-                    },
-                    status=status.HTTP_200_OK
-                )
-            except user.DoesNotExist:
-                return Response(
-                    {
-                        "message":"User not found"
-                    },
-                    status=status.HTTP_404_NOT_FOUND
-                )
-        
-        reviews=UserDetails.objects.all()
-        serializer=UserDetailSerializer(reviews,many=True)
+            return Response(
+                {
+                    "message": "Profile retrieved successfully",
+                    "data": serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
 
-        return Response(
-            {
-                "message":"User retrieved successfully",
-                "data":serializer.data
-            },
-            status=status.HTTP_200_OK
-        )
+        except UserDetails.DoesNotExist:
+
+            return Response(
+                {
+                    "message": "Profile not found"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
