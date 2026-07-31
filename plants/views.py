@@ -53,8 +53,14 @@ class PlantApiView(APIView):
                     status=status.HTTP_404_NOT_FOUND
                 )
 
-        # All Plants (Paginated)
+        search = request.query_params.get("search", "").strip()
+
         plants = Plant.objects.all()
+
+        # GET /api/plants/?search=rose
+
+        if search:
+            plants = plants.filter(name__icontains=search)
 
         paginator = PlantPagination()
 
