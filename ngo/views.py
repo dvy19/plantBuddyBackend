@@ -15,16 +15,12 @@ class NGOView(APIView):
         serializer = NGOSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {
-                    "message": "NGO profile created successfully",
-                    "data": serializer.data
-                },
-
-                status=status.HTTP_200_OK
-
-                )
+            try:
+                serializer.save(user=request.user)   # or serializer.save()
+                return Response(serializer.data)
+            except Exception as e:
+                print(e)
+                raise
         else:
             print(serializer.errors)
             
