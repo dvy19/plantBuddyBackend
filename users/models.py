@@ -33,10 +33,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     USER = "user"
     ADMIN = "admin"
+    NGO="ngo"
 
     ROLE_CHOICES = [
         (USER, "User"),
         (ADMIN, "Admin"),
+        (NGO, "NGO"),
     ]
 
     email    = models.EmailField(unique=True)

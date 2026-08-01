@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 import cloudinary
+
+import cloudinary
 import dj_database_url
 from dotenv import load_dotenv
 
@@ -52,8 +54,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'ngo',
+
+    'cloudinary',
+    'cloudinary_storage',
    
 ]
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -120,6 +128,14 @@ REST_FRAMEWORK = {
     ]
 }
 
+
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=os.getenv("CLOUDINARY_SECURE") == "True"
+)
 
 
 # Password validation
