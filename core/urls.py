@@ -23,4 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/plants/',include('plants.urls')),
     path('api/accounts/', include('users.urls')),  # Include URLs from the api app
+
+    path('api/ngo/', include('ngo.urls')),  # Include URLs from the api app
 ]
