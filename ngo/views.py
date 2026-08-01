@@ -25,6 +25,9 @@ class NGOView(APIView):
                 status=status.HTTP_200_OK
 
                 )
+        else:
+            print(serializer.errors)
+            
 
         return Response(serializer.errors, status=400)
 
