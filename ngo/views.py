@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from .models import NGO, Campaign
-from .serializer import NGOSerializer, NgoCampaignSerializer
+from .serializer import CampaignSerializer, NGOSerializer, NgoCampaignSerializer
 
 # Create your views here.
 class NGOView(APIView):
@@ -64,34 +64,42 @@ class NGOView(APIView):
         )
 
 
+class CampaignView(APIView):
 
-class NGOCampaignView(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request):
-        serializer = NgoCampaignSerializer(data=request.data)
+
+        try:
+            ngo = request.user.ngo_profile
+        except NGO.DoesNotExist:
+            return Response(
+                {"message": "NGO profile not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = CampaignSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(ngo=ngo)
+
             return Response(
                 {
-                    "message": "Campaign created successfully",
+                    "message": "Campaign created successfully.",
                     "data": serializer.data
                 },
+                status=status.HTTP_201_CREATED
+            )
 
-                status=status.HTTP_200_OK
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-                )
-
-        return Response(serializer.errors, status=400)
-
-    def get(self, request , campaign_id=None):
+    def get(self, request, campaign_id=None):
 
         if campaign_id:
             try:
                 campaign = Campaign.objects.get(id=campaign_id)
 
-                serializer = NgoCampaignSerializer(campaign)
+                serializer = CampaignSerializer(campaign)
 
                 return Response(
                     {
@@ -111,7 +119,7 @@ class NGOCampaignView(APIView):
 
         campaigns = Campaign.objects.all()
 
-        serializer = NgoCampaignSerializer(campaigns, many=True)
+        serializer = CampaignSerializer(campaigns, many=True)
 
         return Response(
             {
@@ -120,5 +128,3 @@ class NGOCampaignView(APIView):
             },
             status=status.HTTP_200_OK
         )
-
-    

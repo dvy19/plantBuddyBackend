@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from .models import NGO
+from .models import NGO, Campaign
 
 
 class NGOSerializer(serializers.ModelSerializer):
@@ -10,9 +10,16 @@ class NGOSerializer(serializers.ModelSerializer):
         model = NGO
         fields = "__all__"
         read_only_fields = ['created_at', 'updated_at' , 'user']
+class CampaignSerializer(serializers.ModelSerializer):
 
-class NgoCampaignSerializer(serializers.ModelSerializer):
     class Meta:
-        model = NGO
+        model = Campaign
         fields = "__all__"
+        read_only_fields = [
+            "ngo",
+            "current_volunteers",
+            "current_amount",
+            "created_at",
+            "updated_at"
+        ]
    
