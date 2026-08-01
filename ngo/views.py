@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from .models import NGO, Campaign
-from .serializer import CampaignSerializer, NGOSerializer, NgoCampaignSerializer
+from .serializer import CampaignSerializer, NGOSerializer, CampaignSerializer
 
 # Create your views here.
 class NGOView(APIView):
