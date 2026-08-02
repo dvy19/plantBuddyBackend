@@ -63,6 +63,25 @@ class NGOView(APIView):
             status=status.HTTP_200_OK
         )
 
+class MyNGOView(APIView):
+
+    def get(self, request):
+        try:
+            ngo = request.user.ngo_profile
+        except NGO.DoesNotExist:
+            return Response(
+                {"message": "NGO profile not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = NGOSerializer(ngo)
+
+        return Response(
+            {
+                "message": "NGO retrieved successfully",
+                "data": serializer.data
+            }
+        )
 
 class CampaignView(APIView):
 
