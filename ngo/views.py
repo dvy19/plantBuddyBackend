@@ -119,7 +119,6 @@ class CampaignView(APIView):
         print(serializer.errors)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     def get(self, request, campaign_id=None):
 
         if campaign_id:
@@ -146,11 +145,16 @@ class CampaignView(APIView):
 
         campaigns = Campaign.objects.all()
 
+        ngo_id = request.query_params.get("ngo_id")
         is_active = request.query_params.get("is_active")
 
+        if ngo_id:
+            campaigns = campaigns.filter(ngo_id=ngo_id)
+
         if is_active is not None:
-            is_active = is_active.lower() == "true"
-            campaigns = campaigns.filter(is_active=is_active)
+            campaigns = campaigns.filter(
+                is_active=is_active.lower() == "true"
+            )
 
         serializer = CampaignSerializer(campaigns, many=True)
 
@@ -160,4 +164,4 @@ class CampaignView(APIView):
                 "data": serializer.data
             },
             status=status.HTTP_200_OK
-        )
+            )
