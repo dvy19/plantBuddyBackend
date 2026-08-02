@@ -79,7 +79,6 @@ class CampaignView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        print(serializer.is_valid())
         serializer = CampaignSerializer(data=request.data)
 
         print(serializer.is_valid())
