@@ -73,12 +73,17 @@ class CampaignView(APIView):
         try:
             ngo = request.user.ngo_profile
         except NGO.DoesNotExist:
+
             return Response(
                 {"message": "NGO profile not found."},
                 status=status.HTTP_404_NOT_FOUND
             )
 
+        print(serializer.is_valid())
         serializer = CampaignSerializer(data=request.data)
+
+        print(serializer.is_valid())
+        print(serializer.errors)
 
         if serializer.is_valid():
             serializer.save(ngo=ngo)
@@ -90,6 +95,10 @@ class CampaignView(APIView):
                 },
                 status=status.HTTP_201_CREATED
             )
+
+        print(serializer.errors)
+        print(serializer.is_valid())
+        print(serializer.errors)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
