@@ -146,6 +146,12 @@ class CampaignView(APIView):
 
         campaigns = Campaign.objects.all()
 
+        is_active = request.query_params.get("is_active")
+
+        if is_active is not None:
+            is_active = is_active.lower() == "true"
+            campaigns = campaigns.filter(is_active=is_active)
+
         serializer = CampaignSerializer(campaigns, many=True)
 
         return Response(
