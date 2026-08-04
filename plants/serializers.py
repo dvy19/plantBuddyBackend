@@ -106,3 +106,13 @@ class WaterLogSerializer(serializers.ModelSerializer):
         ]
 
 
+class PlantOfDayRequestSerializer(serializers.Serializer):
+    city = serializers.CharField()
+    temperature = serializers.FloatField()
+    humidity = serializers.IntegerField()
+    weather = serializers.CharField()
+    description = serializers.CharField()
+    wind_speed = serializers.FloatField()
+    rain = serializers.FloatField(required=False, default=0.0)
+    sunrise = serializers.IntegerField()
+    sunset = serializers.IntegerField()

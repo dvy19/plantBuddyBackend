@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .models import Plant, FAQQuestion, PlantFAQ
-from .serializers import PlantSerializer, FaqSerializer, PlantFaqCacheSerializer, WaterLogSerializer, WaterLog
+from .serializers import PlantOfDayRequestSerializer, PlantSerializer, FaqSerializer, PlantFaqCacheSerializer, WaterLogSerializer, WaterLog
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import ListAPIView
 from datetime import date, timedelta
@@ -14,7 +14,7 @@ import traceback
 
 from .pagination import PlantPagination
 
-from .services.gemini_service import plant_facts_for_a_day , plant_faq_question
+from .services.gemini_service import plant_facts_for_a_day , plant_faq_question, plant_of_the_day
 
 class PlantApiView(APIView):
 
@@ -299,3 +299,35 @@ class WaterLogApiView(APIView):
             "logs": serializer.data
         })
 
+
+class PlantOfTheDayView(APIView):
+
+    def post(self, request):
+
+        serializer = PlantOfDayRequestSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                result = plant_of_the_day(serializer.validated_data)
+
+                return Response(
+                    {
+                        "message": "Plant of the day generated successfully.",
+                        "data": result
+                    },
+                    status=status.HTTP_200_OK
+                )
+
+            except Exception as e:
+                return Response(
+                    {
+                        "message": "Failed to generate plant recommendation.",
+                        "error": str(e)
+                    },
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )

@@ -69,6 +69,7 @@ class RegisterView(APIView):
             print(serializer.errors)  # Check your terminal/console
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UserDetailApiView(APIView):
 
 

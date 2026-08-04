@@ -48,3 +48,27 @@ class Campaign(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class JoinRequest(models.Model):
+
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='join_requests')
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='join_requests')
+
+    status_choices = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
+    status = models.CharField(max_length=10, choices=status_choices, default='pending')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('campaign', 'user')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.campaign.title} - {self.status}"

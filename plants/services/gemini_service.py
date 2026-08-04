@@ -89,53 +89,53 @@ def plant_faq_question(plant, faq_question):
         )
 
         prompt = f"""
-You are PlantBuddy AI.
+        You are PlantBuddy AI.
 
-Use the following plant information as the PRIMARY source of truth.
+        Use the following plant information as the PRIMARY source of truth.
 
-Plant Information
+        Plant Information
 
-Name: {plant.name}
-Scientific Name: {plant.scientific_name}
-Category: {plant.category.name}
-Description: {plant.description}
-Light Requirement: {plant.light_requirement.name}
-Water Requirement: {plant.water_requirement.name}
-Soil: {plant.soil_type.name}
-Temperature: {plant.temperature_min}°C - {plant.temperature_max}°C
-Humidity: {plant.humidity}
-Growth Rate: {plant.growth_rate.name}
-Lifespan: {plant.lifespan.name}
-Average Height: {plant.average_height}
-Fertilizer: {plant.fertilizer}
+        Name: {plant.name}
+        Scientific Name: {plant.scientific_name}
+        Category: {plant.category.name}
+        Description: {plant.description}
+        Light Requirement: {plant.light_requirement.name}
+        Water Requirement: {plant.water_requirement.name}
+        Soil: {plant.soil_type.name}
+        Temperature: {plant.temperature_min}°C - {plant.temperature_max}°C
+        Humidity: {plant.humidity}
+        Growth Rate: {plant.growth_rate.name}
+        Lifespan: {plant.lifespan.name}
+        Average Height: {plant.average_height}
+        Fertilizer: {plant.fertilizer}
 
-Instructions
+        Instructions
 
-- Use the supplied plant information whenever possible.
-- Use botanical knowledge only to supplement missing information.
-- Never contradict the supplied data.
-- Keep the answer concise and practical.
-- Answer in simple English.
-- Return ONLY valid JSON.
-- Do NOT wrap the JSON in markdown.
-- Do NOT use ```json.
-- The "tips" array must contain exactly 3 items.
+        - Use the supplied plant information whenever possible.
+        - Use botanical knowledge only to supplement missing information.
+        - Never contradict the supplied data.
+        - Keep the answer concise and practical.
+        - Answer in simple English.
+        - Return ONLY valid JSON.
+        - Do NOT wrap the JSON in markdown.
+        - Do NOT use ```json.
+        - The "tips" array must contain exactly 3 items.
 
-Return this JSON format only:
+        Return this JSON format only:
 
-{{
-    "question": "{user_question}",
-    "answer": "...",
-    "tips": [
-        "...",
-        "...",
-        "..."
-    ]
-}}
+        {{
+            "question": "{user_question}",
+            "answer": "...",
+            "tips": [
+                "...",
+                "...",
+                "..."
+            ]
+        }}
 
-User Question:
-{user_question}
-"""
+        User Question:
+        {user_question}
+        """
 
         response = client.models.generate_content(
             model="gemini-3.5-flash-lite",
@@ -156,3 +156,65 @@ User Question:
         traceback.print_exc()
         raise
 
+
+
+def plant_of_the_day(weather):
+
+        prompt = f"""You are a professional botanist and gardening expert.
+
+        Based on the current weather conditions, recommend ONE plant that is most suitable as the "Plant of the Day".
+
+        Current Weather:
+        - City: {weather["city"]}
+        - Temperature: {weather["temperature"]}°C
+        - Humidity: {weather["humidity"]}%
+        - Weather: {weather["weather"]}
+        - Description: {weather["description"]}
+        - Wind Speed: {weather["wind_speed"]} m/s
+        - Rainfall (last hour): {weather["rain"]} mm
+        - Sunrise: {weather["sunrise"]}
+        - Sunset: {weather["sunset"]}
+
+        Choose a plant that naturally thrives or performs well in these environmental conditions.
+
+        Return ONLY valid JSON.
+
+        JSON Schema:
+
+        {
+        "name": "Common plant name",
+        "scientific_name": "Scientific name",
+        "category": "Flowering | Indoor | Outdoor | Succulent | Herb | Tree | Shrub | Vegetable | Fruit",
+        "why_today": "Why this plant matches today's weather.",
+        "care_tip": "One useful care tip based on today's weather.",
+        "fun_fact": "One interesting fact about this plant.",
+        "watering": "Low | Moderate | High",
+        "sunlight": "Full Sun | Partial Sun | Shade",
+        "difficulty": "Easy | Medium | Hard",
+        "pet_friendly": true,
+        "air_purifying": false
+        }
+
+        Rules:
+        - Recommend exactly one real plant.
+        - Do not invent plant names.
+        - The recommendation must depend on the weather provided.
+        - Keep every text field under 50 words.
+        - Return only JSON.
+        """
+
+        response = client.models.generate_content(
+            model="gemini-3.5-flash-lite",
+            contents=prompt,
+        )
+
+        response_text = response.text.strip()
+
+        # Remove ```json ... ```
+        response_text = re.sub(r"^```json\s*", "", response_text)
+        response_text = re.sub(r"^```\s*", "", response_text)
+        response_text = re.sub(r"\s*```$", "", response_text)
+
+        return json.loads(response_text)
+
+    

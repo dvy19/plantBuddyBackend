@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import PlantApiView, PlantFactForDay, PlantCategoryFilterAPIView, PlantFAQAPIView, WaterLogApiView
+from .views import PlantApiView, PlantFactForDay, PlantCategoryFilterAPIView, PlantFAQAPIView, PlantOfTheDayView, WaterLogApiView
 
 urlpatterns = [
     path(
@@ -8,6 +8,8 @@ urlpatterns = [
         PlantApiView.as_view(),
         name="get-single-plant"
     ),
+
+    path("plant-of-the-day/", PlantOfTheDayView.as_view()),
 
      path(
             "allPlants/",
