@@ -181,7 +181,7 @@ def plant_of_the_day(weather):
 
         JSON Schema:
 
-        {
+        {{
         "name": "Common plant name",
         "scientific_name": "Scientific name",
         "category": "Flowering | Indoor | Outdoor | Succulent | Herb | Tree | Shrub | Vegetable | Fruit",
@@ -193,7 +193,7 @@ def plant_of_the_day(weather):
         "difficulty": "Easy | Medium | Hard",
         "pet_friendly": true,
         "air_purifying": false
-        }
+        }}
 
         Rules:
         - Recommend exactly one real plant.

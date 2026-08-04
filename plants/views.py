@@ -302,6 +302,8 @@ class WaterLogApiView(APIView):
 
 class PlantOfTheDayView(APIView):
 
+    permission_classes = [AllowAny]
+
     def post(self, request):
 
         serializer = PlantOfDayRequestSerializer(data=request.data)
