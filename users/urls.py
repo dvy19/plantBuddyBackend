@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from .views import  LoginView, RegisterView , UserDetailApiView, VolunteerProfileApiView
+from .views import  LoginView, RegisterView , UserDetailApiView, VolunteerView
 
 urlpatterns = [
 
@@ -10,7 +10,7 @@ urlpatterns = [
 
     path('create-profile/', UserDetailApiView.as_view()),
 
-    path('create-volunteer-profile/', VolunteerProfileApiView.as_view()),
+    path('create-volunteer-profile/', VolunteerView.as_view()),
 
 
 ]

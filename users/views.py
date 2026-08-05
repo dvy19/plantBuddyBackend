@@ -129,7 +129,7 @@ class UserDetailApiView(APIView):
             )
 
 
-class VolnteerView(APIView):
+class VolunteerView(APIView):
 
     def post(self, request):
 
