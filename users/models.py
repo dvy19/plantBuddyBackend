@@ -79,6 +79,8 @@ class VolunteerProfile(models.Model):
     gender=models.CharField(max_length=10)
     city=models.CharField(max_length=50)
 
+    image=models.ImageField(upload_to='volunteer_images/', null=True, blank=True)
+
     def __str__(self):
         return {self.name}
     
