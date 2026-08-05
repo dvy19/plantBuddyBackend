@@ -62,3 +62,20 @@ class UserDetailSerializer(serializers.ModelSerializer):
         ]
         read_only_fields=["user"]
 
+
+class VolunteerSerializer(serializers.ModelSerializer):
+
+    mail = serializers.CharField(source="user.email", read_only=True)
+
+    class Meta:
+        model=UserDetails
+        fields=[
+            "user",
+            "mail",
+            "name",
+            "city",
+            "phone",
+            "email",
+            "gender"
+        ]
+        read_only_fields=["user"]

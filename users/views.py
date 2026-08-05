@@ -3,10 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from .serializers import LoginSerializer, RegisterSerializer , UserDetailSerializer
+from .serializers import LoginSerializer, RegisterSerializer , UserDetailSerializer, VolunteerSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import UserDetails
+from .models import UserDetails, VolunteerProfile
 
 # Create your views here.
 
@@ -128,3 +128,51 @@ class UserDetailApiView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+
+class VolnteerView(APIView):
+
+    def post(self, request):
+
+        serializer = VolunteerSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+
+            return Response(
+                {
+                    "message": "Volunteer profile saved successfully",
+                    "data": serializer.data
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+        return Response(
+            {
+                "message": "Failed to save volunteer profile",
+                "errors": serializer.errors
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def get(self, request):
+        try:
+            profile = VolunteerProfile.objects.get(user=request.user)
+
+            serializer = VolunteerSerializer(profile)
+
+            return Response(
+                {
+                    "message": "Volunteer profile retrieved successfully",
+                    "data": serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        except VolunteerProfile.DoesNotExist:
+
+            return Response(
+                {
+                    "message": "Volunteer profile not found"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
