@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import CustomUser, UserDetails
+from .models import CustomUser, UserDetails, VolunteerProfile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -68,14 +68,13 @@ class VolunteerSerializer(serializers.ModelSerializer):
     mail = serializers.CharField(source="user.email", read_only=True)
 
     class Meta:
-        model=UserDetails
+        model=VolunteerProfile
         fields=[
             "user",
             "mail",
             "name",
             "city",
             "phone",
-            "email",
             "gender"
         ]
-        read_only_fields=["user"]
+        read_only_fields=["user"  , "mail"]
