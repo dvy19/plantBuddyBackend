@@ -65,7 +65,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
 class VolunteerSerializer(serializers.ModelSerializer):
 
-    mail = serializers.CharField(source="user.email", read_only=True)
+    mail = serializers.EmailField(source="user.email", read_only=True)
 
     class Meta:
         model=VolunteerProfile
@@ -75,6 +75,7 @@ class VolunteerSerializer(serializers.ModelSerializer):
             "name",
             "city",
             "phone",
-            "gender"
+            "gender",
+            "image"
         ]
         read_only_fields=["user"  , "mail"]

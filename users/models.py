@@ -69,9 +69,12 @@ class UserDetails(models.Model):
     
 
 class VolunteerProfile(models.Model):
-    
-    user=models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
+        
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name="volunteer_profile"
+    )
     name=models.CharField(max_length=50)
 
     phone=models.CharField(max_length=15)

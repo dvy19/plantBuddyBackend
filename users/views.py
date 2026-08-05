@@ -138,6 +138,9 @@ class VolunteerView(APIView):
         if serializer.is_valid():
             serializer.save(user=request.user)
 
+            print(serializer.data)  # Debugging line to print the serialized data
+            print(serializer.errors)  # Debugging line to print any errors
+
             return Response(
                 {
                     "message": "Volunteer profile saved successfully",
