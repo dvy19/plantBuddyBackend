@@ -1,4 +1,6 @@
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import render
+from httpcore import request
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -131,6 +133,9 @@ class UserDetailApiView(APIView):
 
 class VolunteerView(APIView):
 
+    parser_classes = [MultiPartParser, FormParser]
+
+   
     def post(self, request):
 
         serializer = VolunteerSerializer(data=request.data)
