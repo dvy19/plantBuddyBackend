@@ -96,6 +96,8 @@ class PlantFactForDay(APIView):
 class PlantCategoryFilterAPIView(ListAPIView):
     serializer_class = PlantSerializer
 
+    permission_classes=[AllowAny]
+
     def get_queryset(self):
         queryset = Plant.objects.all()
 

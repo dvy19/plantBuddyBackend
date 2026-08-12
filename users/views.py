@@ -1,5 +1,5 @@
 from rest_framework.parsers import MultiPartParser, FormParser
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from httpcore import request
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -159,6 +159,34 @@ class VolunteerView(APIView):
                 "message": "Failed to save volunteer profile",
                 "errors": serializer.errors
             },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def put(self, request):
+        profile = get_object_or_404(
+            VolunteerProfile,
+            user=request.user
+        )
+
+        serializer = VolunteerSerializer(
+            profile,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(
+                {
+                    "message": "Volunteer profile updated successfully.",
+                    "data": serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
 
