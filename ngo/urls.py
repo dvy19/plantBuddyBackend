@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from .views import  MyNGOView, NGOView, CampaignView
+from .views import  MyNGOView, NGOView, CampaignView,  MyCampaignAPIView
 
 
 urlpatterns = [
@@ -17,6 +17,12 @@ urlpatterns = [
     path("campaigns/", CampaignView.as_view(), name="ngo-campaign-get-all"),
 
     path("profile/", MyNGOView.as_view(), name="ngo-profile"),
+
+    path(
+    "campaigns/my/",
+    MyCampaignAPIView.as_view(),
+    name="my-campaigns"
+    )
 
     
 

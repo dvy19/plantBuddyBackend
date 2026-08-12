@@ -119,6 +119,7 @@ class CampaignView(APIView):
         print(serializer.errors)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def get(self, request, campaign_id=None):
 
         if campaign_id:
@@ -165,3 +166,23 @@ class CampaignView(APIView):
             },
             status=status.HTTP_200_OK
             )
+
+
+class MyCampaignAPIView(APIView):
+
+    def get(self, request):
+
+        campaigns = Campaign.objects.filter(
+            ngo__user=request.user,
+            is_active=True
+        )
+
+        serializer = CampaignSerializer(
+            campaigns,
+            many=True
+        )
+
+        return Response({
+            "message": "My active campaigns retrieved successfully",
+            "data": serializer.data
+        })
