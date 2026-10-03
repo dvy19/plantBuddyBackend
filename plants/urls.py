@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import PlantApiView, PlantFactForDay, PlantCategoryFilterAPIView, PlantFAQAPIView, PlantOfTheDayView, WaterLogApiView
+from .views import PlantApiView, PlantFactForDay, PlantCategoryFilterAPIView, PlantFAQAPIView, PlantOfTheDayView, WaterLogApiView, health_check
 
 urlpatterns = [
     path(
@@ -37,6 +37,8 @@ urlpatterns = [
     path("water/", WaterLogApiView.as_view()),
     path("water/<int:plant_id>/", WaterLogApiView.as_view()),
 
+
+    path("health-check/" , health_check)
 
 
 ]

@@ -170,6 +170,8 @@ class CampaignView(APIView):
 
 class MyCampaignAPIView(APIView):
 
+    
+
     def get(self, request):
 
         campaigns = Campaign.objects.filter(

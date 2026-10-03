@@ -169,3 +169,16 @@ class WaterLog(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.plant} - {self.watered_on}"
+
+
+class WateringSchedule(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    plant = models.ForeignKey(Plant, on_delete=models.CASCADE)
+
+    watering_time = models.TimeField()
+
+    next_watering_date = models.DateField()
+
+    enabled = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)

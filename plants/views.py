@@ -12,9 +12,20 @@ from rest_framework.views import APIView
 from rest_framework import status
 import traceback
 
+from django.http import JsonResponse
+
+
 from .pagination import PlantPagination
 
 from .services.gemini_service import plant_facts_for_a_day , plant_faq_question, plant_of_the_day
+
+def health_check(request):
+    return JsonResponse({
+        "status": "ok"
+    })
+
+
+
 
 class PlantApiView(APIView):
 
@@ -75,7 +86,7 @@ class PlantApiView(APIView):
             }
         )
 
-        
+
 
 
 class PlantFactForDay(APIView):
